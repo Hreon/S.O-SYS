@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./apache-php
+    container_name: sysmarket_web
+    ports:
+      - "80:80"
+    volumes:
+      - ./apache-php/src:/var/www/html
+      - /proc:/host/proc:ro
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sysmarket_net
+    restart: unless-stopped
+
+  db:
+    image: mysql:8.0
+    container_name: sysmarket_db
+    environment:
+      MYSQL_ROOT_PASSWORD: ${DB_ROOT_PASS}
+      MYSQL_DATABASE: ${DB_NAME}
+      MYSQL_USER: ${DB_USER}
+      MYSQL_PASSWORD: ${DB_PASS}
+    volumes:
+      - db_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-p${DB_ROOT_PASS}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sysmarket_net
+    restart: unless-stopped
+
+  monitor:
+    build: ./monitor
+    container_name: sysmarket_monitor
+    volumes:
+      - /proc:/host/proc:ro
+    environment:
+      - DB_HOST=db
+      - DB_NAME=${DB_NAME}
+      - DB_USER=${DB_USER}
+      - DB_PASS=${DB_PASS}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - sysmarket_net
+    restart: unless-stopped
+
+volumes:
+  db_data:
+
+networks:
+  sysmarket_net:
+    driver: bridge
