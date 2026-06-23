@@ -1,5 +1,6 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/social_helpers.php';
 $id = (int)($_GET['id'] ?? 0);
 $db = getDB();
 $stmt = $db->prepare("
@@ -81,6 +82,94 @@ include __DIR__ . '/includes/header.php';
       </div>
     </div>
   </div>
+
+  <!-- ============================================================
+       BLOQUE SOCIAL — likes + reseñas
+       ============================================================ -->
+  <hr class="my-5" style="border-color:var(--sm-border)">
+  <link rel="stylesheet" href="/assets/css/social.css">
+  <?php
+    $sm_total_likes = likesCount((int)$p['id']);
+    $sm_user_liked  = isLoggedIn() ? userLiked((int)$p['id'], (int)$_SESSION['user_id']) : false;
+    $sm_avg         = avgRating((int)$p['id']);
+    $sm_reviews     = getComments((int)$p['id'], 20);
+  ?>
+
+  <div class="row g-4">
+    <div class="col-lg-12">
+      <div class="d-flex align-items-center gap-3 flex-wrap mb-4">
+        <button class="sm-like-btn <?= $sm_user_liked ? 'liked' : '' ?>"
+                data-producto-id="<?= (int)$p['id'] ?>">
+          <i class="bi bi-heart-fill like-icon"></i>
+          <span><?= $sm_user_liked ? 'Te gusta' : 'Me gusta' ?></span>
+          <span class="like-count"><?= $sm_total_likes ?></span>
+        </button>
+
+        <?php if (count($sm_reviews) > 0): ?>
+          <div>
+            <?= renderStars($sm_avg) ?>
+            <span class="text-secondary ms-2">
+              <?= number_format($sm_avg, 1) ?>
+              <span class="small">(<?= count($sm_reviews) ?> reseña<?= count($sm_reviews) > 1 ? 's' : '' ?>)</span>
+            </span>
+          </div>
+        <?php endif; ?>
+      </div>
+
+      <h4 class="mb-3"><i class="bi bi-chat-quote me-2"></i>Reseñas y comentarios</h4>
+
+      <?php if (isLoggedIn()): ?>
+      <form id="frmComentario" class="sm-card sm-card-pad mb-4">
+        <input type="hidden" name="producto_id" value="<?= (int)$p['id'] ?>">
+
+        <label class="d-block fw-semibold mb-2">Tu calificación</label>
+        <div class="sm-rating-input mb-3">
+          <input type="radio" id="r5" name="rating" value="5"><label for="r5"><i class="bi bi-star-fill"></i></label>
+          <input type="radio" id="r4" name="rating" value="4"><label for="r4"><i class="bi bi-star-fill"></i></label>
+          <input type="radio" id="r3" name="rating" value="3"><label for="r3"><i class="bi bi-star-fill"></i></label>
+          <input type="radio" id="r2" name="rating" value="2"><label for="r2"><i class="bi bi-star-fill"></i></label>
+          <input type="radio" id="r1" name="rating" value="1"><label for="r1"><i class="bi bi-star-fill"></i></label>
+        </div>
+
+        <textarea name="comentario" rows="3" required maxlength="1000"
+                  class="form-control sm-form-dark mb-2"
+                  placeholder="Cuenta tu experiencia con este producto..."></textarea>
+
+        <button type="submit" class="btn sm-btn-primary">
+          <i class="bi bi-send me-1"></i>Publicar reseña
+        </button>
+      </form>
+      <?php else: ?>
+      <div class="sm-card sm-card-pad text-center py-3 mb-4">
+        <p class="text-secondary mb-0">
+          <a href="/login.php" class="text-info">Inicia sesión</a> para dejar una reseña.
+        </p>
+      </div>
+      <?php endif; ?>
+
+      <div id="reviewList">
+        <?php if (empty($sm_reviews)): ?>
+          <div class="text-secondary text-center py-3 empty-state">
+            Aún no hay reseñas. ¡Sé el primero en opinar!
+          </div>
+        <?php else: foreach ($sm_reviews as $r): ?>
+          <div class="sm-review-item">
+            <div class="d-flex justify-content-between mb-2">
+              <span class="fw-semibold"><?= h($r['user_nombre'] . ' ' . $r['user_apellido']) ?></span>
+              <span class="small text-secondary"><?= h($r['creado_en']) ?></span>
+            </div>
+            <div class="sm-stars mb-2"><?= renderStars((float)$r['rating']) ?></div>
+            <p class="text-secondary mb-0"><?= nl2br(h($r['comentario'])) ?></p>
+          </div>
+        <?php endforeach; endif; ?>
+      </div>
+    </div>
+  </div>
+
+  <script src="/assets/js/social.js"></script>
+  <!-- ============================================================
+       FIN BLOQUE SOCIAL
+       ============================================================ -->
 
   <?php if (!empty($relacionados)): ?>
   <hr class="my-5" style="border-color:var(--sm-border)">

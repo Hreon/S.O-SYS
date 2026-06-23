@@ -1,7 +1,9 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/social_helpers.php';
 requireAdmin();
 $db = getDB();
+$social = socialKpis();
 
 // KPIs
 $kpi_usuarios  = (int)$db->query("SELECT COUNT(*) FROM usuarios")->fetchColumn();
@@ -57,6 +59,37 @@ include __DIR__ . '/includes/header.php';
     <div class="col-6 col-md-4 col-lg-2">
       <div class="sm-card sm-card-pad">
         <div style="width:36px;height:36px;border-radius:10px;background:var(--bs-<?=$c?>);opacity:.85;display:flex;align-items:center;justify-content:center;color:white">
+          <i class="bi <?=$i?>"></i>
+        </div>
+        <div class="fs-3 fw-bold mt-2" style="letter-spacing:-.02em"><?=$v?></div>
+        <div class="small text-secondary"><?=$l?></div>
+      </div>
+    </div>
+    <?php endforeach; ?>
+  </div>
+
+  <!-- ============================================================
+       KPIs SOCIALES (Social Commerce)
+       ============================================================ -->
+  <link rel="stylesheet" href="/assets/css/social.css">
+  <h5 class="mb-2" style="font-weight:700">
+    <i class="bi bi-heart-fill text-danger me-2"></i>Métricas sociales
+  </h5>
+  <p class="small text-secondary mb-3">Actividad de la comunidad en la plataforma</p>
+
+  <div class="row g-3 mb-4 sm-stagger">
+    <?php
+    $social_kpis = [
+      ['Likes totales',     'bi-heart-fill',         'sm-social-kpi-icon-pink',   $social['total_likes']],
+      ['Reseñas',           'bi-chat-quote-fill',    'sm-social-kpi-icon-blue',   $social['total_comentarios']],
+      ['Publicaciones',     'bi-megaphone-fill',     'sm-social-kpi-icon-violet', $social['total_publicaciones']],
+      ['Rating promedio',   'bi-star-fill',          'sm-social-kpi-icon-warn',   number_format($social['rating_promedio'], 2)],
+    ];
+    foreach ($social_kpis as [$l,$i,$c,$v]):
+    ?>
+    <div class="col-6 col-md-3">
+      <div class="sm-card sm-card-pad">
+        <div class="<?=$c?>" style="width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;color:white">
           <i class="bi <?=$i?>"></i>
         </div>
         <div class="fs-3 fw-bold mt-2" style="letter-spacing:-.02em"><?=$v?></div>

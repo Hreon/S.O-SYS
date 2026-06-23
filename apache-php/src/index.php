@@ -1,6 +1,8 @@
 <?php
 require_once __DIR__ . '/includes/auth.php';
+require_once __DIR__ . '/includes/social_helpers.php';
 $db = getDB();
+$populares = topLikedProducts(6);
 // Productos destacados (max 8)
 $destacados = $db->query("
     SELECT p.*, c.slug AS cat_slug, c.icono AS cat_icono
@@ -126,6 +128,45 @@ include __DIR__ . '/includes/header.php';
     </div>
   </div>
 </section>
+
+<!-- ===========================================================
+     SECCIÓN — PRODUCTOS POPULARES (Social Commerce)
+     =========================================================== -->
+<?php if (!empty($populares)): ?>
+<link rel="stylesheet" href="/assets/css/social.css">
+<section class="sm-section">
+  <div class="container-xl">
+    <div class="sm-section-h">
+      <div>
+        <h2>Productos más populares <i class="bi bi-heart-fill text-danger"></i></h2>
+        <p>Los componentes con más likes de la comunidad.</p>
+      </div>
+      <a href="/feed.php" class="btn sm-btn-ghost btn-sm">
+        Ver feed social <i class="bi bi-arrow-right ms-1"></i>
+      </a>
+    </div>
+    <div class="row g-3 sm-stagger">
+      <?php foreach ($populares as $pp): ?>
+      <div class="col-6 col-md-4 col-lg-2">
+        <a href="/producto.php?id=<?= (int)$pp['id'] ?>" class="sm-popular-card">
+          <div class="sm-popular-badge">
+            <i class="bi bi-heart-fill"></i> <?= (int)$pp['total_likes'] ?>
+          </div>
+          <div class="sm-popular-thumb">
+            <i class="bi <?= h($pp['cat_icono']) ?>"></i>
+          </div>
+          <div class="small text-secondary"><?= h($pp['marca']) ?></div>
+          <div class="fw-semibold text-truncate"><?= h($pp['nombre']) ?></div>
+          <div class="fw-bold mt-1" style="color:var(--sm-primary)">
+            S/ <?= number_format((float)$pp['precio'], 2) ?>
+          </div>
+        </a>
+      </div>
+      <?php endforeach; ?>
+    </div>
+  </div>
+</section>
+<?php endif; ?>
 
 <!-- DIFERENCIADOR TÉCNICO -->
 <section class="sm-section">

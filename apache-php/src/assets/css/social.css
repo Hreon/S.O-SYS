@@ -1,0 +1,176 @@
+/* ============================================================
+   SysMarket v2 — Social Commerce Styles
+   Hereda variables --sm-* del style.css principal
+   ============================================================ */
+
+/* Inputs y formularios sobre el tema oscuro */
+.sm-form-dark {
+    background: var(--sm-bg-0, #0F172A) !important;
+    border: 1px solid var(--sm-border, rgba(148,163,184,.15)) !important;
+    color: var(--sm-text, #F1F5F9) !important;
+}
+.sm-form-dark:focus {
+    border-color: var(--sm-primary, #3B82F6) !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.2) !important;
+    background: var(--sm-bg-0, #0F172A) !important;
+    color: var(--sm-text, #F1F5F9) !important;
+}
+.sm-form-dark::placeholder {
+    color: var(--sm-text-mute, #94A3B8) !important;
+}
+
+/* Avatares circulares en posts */
+.sm-avatar {
+    width: 42px; height: 42px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, var(--sm-primary, #3B82F6), var(--sm-accent, #8B5CF6));
+    display: inline-flex; align-items: center; justify-content: center;
+    color: white; font-weight: 700; font-size: 1.05rem;
+    flex-shrink: 0;
+}
+
+/* Shop the Post banner */
+.sm-shop-the-post {
+    background: linear-gradient(135deg, rgba(59,130,246,.10), rgba(139,92,246,.10));
+    border: 1px solid rgba(139,92,246,.35);
+    border-radius: 12px;
+    color: var(--sm-text, #F1F5F9) !important;
+    transition: transform .2s, border-color .2s;
+}
+.sm-shop-the-post:hover {
+    transform: translateY(-2px);
+    border-color: rgba(139,92,246,.65);
+}
+.sm-shop-thumb {
+    width: 56px; height: 56px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #475569, #64748B);
+    display: flex; align-items: center; justify-content: center;
+    color: white; font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+/* Sidebar de top likeados */
+.sm-top-item {
+    border-bottom: 1px solid var(--sm-border, rgba(148,163,184,.15));
+}
+.sm-top-item:last-child { border-bottom: none; }
+.sm-top-item:hover .text-light { color: var(--sm-primary, #3B82F6) !important; }
+.sm-mini-thumb {
+    width: 38px; height: 38px;
+    border-radius: 8px;
+    background: linear-gradient(135deg, #475569, #1E293B);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sm-text-mute, #94A3B8);
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+/* Botón de Like */
+.sm-like-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    padding: .55rem 1rem;
+    border-radius: 10px;
+    border: 1px solid var(--sm-border, rgba(148,163,184,.15));
+    background: rgba(15,23,42,.6);
+    color: var(--sm-text, #F1F5F9);
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .2s;
+}
+.sm-like-btn:hover {
+    border-color: #EC4899;
+    transform: translateY(-2px);
+}
+.sm-like-btn.liked {
+    background: rgba(236,72,153,.15);
+    border-color: #EC4899;
+    color: #EC4899;
+}
+.sm-like-btn .like-icon {
+    font-size: 1.15rem;
+    transition: transform .15s;
+}
+.sm-like-btn:active .like-icon { transform: scale(1.4); }
+.sm-like-btn .like-count {
+    background: rgba(15,23,42,.8);
+    padding: .15rem .55rem;
+    border-radius: 999px;
+    font-size: .85rem;
+}
+
+/* Estrellas de rating */
+.sm-stars {
+    color: #F59E0B;
+    letter-spacing: .05em;
+}
+.sm-stars .bi-star {
+    color: rgba(148,163,184,.35);
+}
+
+/* Input de rating (estrellas clickeables) */
+.sm-rating-input {
+    display: inline-flex;
+    flex-direction: row-reverse;
+    gap: .2rem;
+}
+.sm-rating-input input { display: none; }
+.sm-rating-input label {
+    cursor: pointer;
+    color: rgba(148,163,184,.4);
+    font-size: 1.6rem;
+    transition: color .15s;
+}
+.sm-rating-input input:checked ~ label,
+.sm-rating-input label:hover,
+.sm-rating-input label:hover ~ label {
+    color: #F59E0B;
+}
+
+/* Reseña individual */
+.sm-review-item {
+    padding: 1rem;
+    background: rgba(15,23,42,.5);
+    border: 1px solid var(--sm-border, rgba(148,163,184,.15));
+    border-radius: 12px;
+    margin-bottom: .75rem;
+}
+
+/* Tarjeta de "producto popular" en index */
+.sm-popular-card {
+    background: var(--sm-card, rgba(30,41,59,.6));
+    border: 1px solid var(--sm-border, rgba(148,163,184,.15));
+    border-radius: 14px;
+    padding: 1rem;
+    text-decoration: none;
+    position: relative;
+    color: var(--sm-text, #F1F5F9);
+    transition: transform .2s, border-color .2s;
+    display: block;
+}
+.sm-popular-card:hover {
+    transform: translateY(-4px);
+    border-color: #EC4899;
+    color: var(--sm-text, #F1F5F9);
+}
+.sm-popular-badge {
+    position: absolute;
+    top: 10px; right: 10px;
+    background: rgba(236,72,153,.18);
+    color: #EC4899;
+    padding: .25rem .6rem;
+    border-radius: 999px;
+    font-size: .78rem;
+    font-weight: 700;
+}
+.sm-popular-thumb {
+    width: 100%; height: 130px;
+    border-radius: 10px;
+    background: linear-gradient(135deg, #475569, #1E293B);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--sm-text-mute, #94A3B8);
+    font-size: 2.5rem;
+    margin-bottom: .75rem;
+}

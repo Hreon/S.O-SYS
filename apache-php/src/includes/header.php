@@ -30,6 +30,9 @@ $page_title  = $page_title ?? 'SysMarket — Tienda Tech';
     <ul class="sm-nav-links">
       <li><a href="/index.php"     class="<?= $current_pg==='index.php'?'active':'' ?>">Inicio</a></li>
       <li><a href="/productos.php" class="<?= $current_pg==='productos.php'?'active':'' ?>">Productos</a></li>
+      <li><a href="/feed.php"      class="<?= $current_pg==='feed.php'?'active':'' ?>">
+        <i class="bi bi-heart-fill text-danger"></i> Feed Social
+      </a></li>
       <?php if ($user && $user['rol']==='admin'): ?>
         <li><a href="/monitor.php" class="<?= $current_pg==='monitor.php'?'active':'' ?>">
           <i class="bi bi-activity"></i> Monitor SO
