@@ -31,7 +31,6 @@
         <ul class="sm-footer-list">
           <li>Fabian Roncal Falconi</li>
           <li>Luz Rios Rios</li>
-          <li>Piero Valencia Corilla</li>
         </ul>
       </div>
     </div>

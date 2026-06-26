@@ -206,7 +206,6 @@ sysmarket_v2/
 |---|---|
 | Líder | Fabian Roncal Falconi |
 | Integrante | Luz Rios Rios |
-| Integrante | Piero Valencia Corilla |
 
 **Docente:** Eduardo Vásquez Reyes
 **Universidad:** Universidad San Ignacio de Loyola (USIL)
